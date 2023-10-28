@@ -6,6 +6,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { GetUserInput } from './dto/get-user.input';
 import { UserDocument } from './model/user.schema';
 import { User } from './model/user.model';
+import { UpdateUserInput } from './dto/update-user.input';
 
 @Injectable()
 export class UsersService {
@@ -46,5 +47,13 @@ export class UsersService {
   async findOne(getUserArgs: GetUserInput) {
     const userDoc = await this.userRepo.findOne(getUserArgs);
     return this.toModel(userDoc);
+  }
+
+  async update(updateUserInput: UpdateUserInput) {
+    const updateUser = await this.userRepo.update(
+      { _id: updateUserInput._id },
+      updateUserInput,
+    );
+    return this.toModel(updateUser);
   }
 }

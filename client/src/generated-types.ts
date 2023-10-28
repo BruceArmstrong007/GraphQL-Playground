@@ -27,11 +27,17 @@ export type CreateUserInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
+  updateUser: User;
 };
 
 
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  updateUserInput: UpdateUserInput;
 };
 
 export type Query = {
@@ -42,6 +48,12 @@ export type Query = {
 
 export type QueryUserArgs = {
   _id: Scalars['String']['input'];
+};
+
+export type UpdateUserInput = {
+  _id: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type User = {
@@ -65,6 +77,13 @@ export type GetUserQueryVariables = Exact<{
 
 
 export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', _id: string, email: string, username: string, name: string } };
+
+export type UpdateUserMutationVariables = Exact<{
+  updateUserInput: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', _id: string, email: string, name: string, username: string } };
 
 export const CreateUserDocument = gql`
     mutation createUser($createUserInput: CreateUserInput!) {
@@ -101,6 +120,27 @@ export const GetUserDocument = gql`
   })
   export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
     document = GetUserDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateUserDocument = gql`
+    mutation updateUser($updateUserInput: UpdateUserInput!) {
+  updateUser(updateUserInput: $updateUserInput) {
+    _id
+    email
+    name
+    username
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateUserGQL extends Apollo.Mutation<UpdateUserMutation, UpdateUserMutationVariables> {
+    document = UpdateUserDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
