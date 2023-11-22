@@ -13,6 +13,9 @@ import { MongoDBModule } from '@app/common';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+      subscriptions: {
+        'graphql-ws': true,
+      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,

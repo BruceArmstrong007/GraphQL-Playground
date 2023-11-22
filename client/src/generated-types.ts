@@ -50,6 +50,11 @@ export type QueryUserArgs = {
   _id: Scalars['String']['input'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  userUpdated: User;
+};
+
 export type UpdateUserInput = {
   _id: Scalars['String']['input'];
   name: Scalars['String']['input'];
@@ -84,6 +89,11 @@ export type UpdateUserMutationVariables = Exact<{
 
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', _id: string, email: string, name: string, username: string } };
+
+export type UserUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserUpdatedSubscription = { __typename?: 'Subscription', userUpdated: { __typename?: 'User', _id: string, email: string, username: string, name: string } };
 
 export const CreateUserDocument = gql`
     mutation createUser($createUserInput: CreateUserInput!) {
@@ -141,6 +151,27 @@ export const UpdateUserDocument = gql`
   })
   export class UpdateUserGQL extends Apollo.Mutation<UpdateUserMutation, UpdateUserMutationVariables> {
     document = UpdateUserDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UserUpdatedDocument = gql`
+    subscription userUpdated {
+  userUpdated {
+    _id
+    email
+    username
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UserUpdatedGQL extends Apollo.Subscription<UserUpdatedSubscription, UserUpdatedSubscriptionVariables> {
+    document = UserUpdatedDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
